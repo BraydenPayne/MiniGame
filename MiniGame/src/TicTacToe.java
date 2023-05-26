@@ -63,33 +63,32 @@ public class TicTacToe {
             } else if (playerSymbol == 1) {
                 mineMap[r][c] = 1;
             }
-        }
 
-        // Computer player turn.
-        for (int row = 0; row < mineMap.length; row++) {
-            for (int col = 0; col < mineMap[row].length; col++) {
-                int cRow = randomInt(0, 2);
-                int cCol = randomInt(0, 2);
-                if (mineMap[cRow][cCol] == 0) {
-                    mineMap[cRow][cCol] = computerSymbol;
+            // Computer player turn.
+            while(mineMap[cRow][cCol] != 0) {
+                    int cRow = randomInt(0, 2);
+                    int cCol = randomInt(0, 2);
+                    if (mineMap[cRow][cCol] == 0) {
+                        mineMap[cRow][cCol] = computerSymbol;
+                    }
                 }
-            }
-        }
-
-        // Checking for winning conditions
-        for (int row = 0; row < mineMap.length; row++) {
-            if (mineMap[row][0] == playerSymbol && mineMap[row][1] == playerSymbol && mineMap[row][2] == playerSymbol) {
-                gameOver = true;
-                playerWin = true;
-            }
-            for (int col = 0; col < mineMap[row].length; col++) {
-                if (mineMap[0][col] == playerSymbol && mineMap[1][col] == playerSymbol && mineMap[2][col] == playerSymbol) {
+            // Checking for winning conditions
+            for (int row = 0; row < mineMap.length; row++) {
+                if (mineMap[row][0] == playerSymbol && mineMap[row][1] == playerSymbol
+                        && mineMap[row][2] == playerSymbol) {
                     gameOver = true;
                     playerWin = true;
                 }
+                for (int col = 0; col < mineMap[row].length; col++) {
+                    if (mineMap[0][col] == playerSymbol && mineMap[1][col] == playerSymbol
+                            && mineMap[2][col] == playerSymbol) {
+                        gameOver = true;
+                        playerWin = true;
+                    }
+                }
             }
-        }
 
+        }
     }
 
     public static void printArray(int[] array) {
