@@ -7,7 +7,10 @@ public class TicTacToe {
         int playerSymbol = 0;
         int computerSymbol = 0;
         boolean playerWin;
+        boolean twoPlayerWin;
         boolean computerWin;
+        boolean full = false;
+        boolean gameOver = false;
         for (int row = 0; row < mineMap.length; row++) {
             for (int col = 0; col < mineMap[row].length; col++) {
                 mineMap[row][col] = 0;
@@ -16,8 +19,6 @@ public class TicTacToe {
             System.out.println("");
             System.out.println("");
         }
-
-        boolean gameOver = false;
         // Welcome to Tic-Tac-Toe + choosing your symbol
         System.out.println("Welcome to Tic-Tac-Toe!");
         System.out.println("Would you like to be Os (1) or Xs (2)?");
@@ -36,7 +37,7 @@ public class TicTacToe {
                 System.out.println("Please pick Os (1) or Xs (2) to proceed!");
             }
         }
-        while (!gameOver) {
+        while (!gameOver && !full) {
             // Printing map
             for (int row = 0; row < mineMap.length; row++) {
                 System.out.print("|");
@@ -51,8 +52,12 @@ public class TicTacToe {
                 }
                 System.out.println(" ");
             }
-            // Person player Choosing next move.
-            System.out.println("Where would you like to place your " + playerSymbol + "?");
+            // First player Choosing next move.
+            if (playerSymbol == 1) {
+                System.out.println("Where would you like to place your O?");
+            } else {
+                System.out.println("Where would you like to place your X?");
+            }
             System.out.print("Enter your preferred row: ");
             int r = in.nextInt();
             System.out.println("");
@@ -64,28 +69,47 @@ public class TicTacToe {
                 mineMap[r][c] = 1;
             }
 
-            // Computer player turn.
-            while(mineMap[cRow][cCol] != 0) {
-                    int cRow = randomInt(0, 2);
-                    int cCol = randomInt(0, 2);
-                    if (mineMap[cRow][cCol] == 0) {
-                        mineMap[cRow][cCol] = computerSymbol;
-                    }
-                }
-            // Checking for winning conditions
-            for (int row = 0; row < mineMap.length; row++) {
-                if (mineMap[row][0] == playerSymbol && mineMap[row][1] == playerSymbol
-                        && mineMap[row][2] == playerSymbol) {
-                    gameOver = true;
-                    playerWin = true;
-                }
-                for (int col = 0; col < mineMap[row].length; col++) {
-                    if (mineMap[0][col] == playerSymbol && mineMap[1][col] == playerSymbol
-                            && mineMap[2][col] == playerSymbol) {
-                        gameOver = true;
-                        playerWin = true;
-                    }
-                }
+            // Checking for first-player winning conditions
+            if (isPlayerWin(mineMap, playerSymbol) == true) {
+                playerWin = true;
+                gameOver = true;
+            } else {
+                playerWin = false;
+            }
+
+            // Second player turn.
+            if (computerSymbol == 1) {
+                System.out.println("");
+                System.out.println("Second player turn.");
+                System.out.println("Where would you like to place your O?");
+            } else {
+                System.out.println("Where would you like to place your X?");
+            }
+            System.out.print("Enter your preferred row: ");
+            int rTwo = in.nextInt();
+            System.out.println("");
+            System.out.print("Enter your preferred column: ");
+            int cTwo = in.nextInt();
+            if (computerSymbol == 2) {
+                mineMap[rTwo][cTwo] = 2;
+            } else if (computerSymbol == 1) {
+                mineMap[rTwo][cTwo] = 1;
+            }
+
+            // Checking for second-player winning conditions
+            if (isPlayerWin(mineMap, computerSymbol) == true) {
+                twoPlayerWin = true;
+                gameOver = true;
+            } else {
+                gameOver = false;
+            }
+            // Checking if board is full
+            if (isFull(mineMap) == true) {
+                full = true;
+                gameOver = true;
+            } else {
+                full = false;
+                gameOver = false;
             }
 
         }
@@ -97,7 +121,38 @@ public class TicTacToe {
         }
     }
 
-    public static int randomInt(int low, int high) {
-        return (int) ((high - low + 1) * Math.random() + low);
+    // Checks board if full
+    public static boolean isFull(int[][] array) {
+        for (int row = 0; row < array.length; row++) {
+            for (int col = 0; col < array[row].length; col++) {
+                if (array[row][col] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Checks for winning condition for first player
+    public static boolean isPlayerWin(int[][] array, int playerSymbol) {
+        for (int row = 0; row < array.length; row++) {
+            if (array[row][0] == playerSymbol && array[row][1] == playerSymbol
+                    && array[row][2] == playerSymbol) {
+                return true;
+            }
+            for (int col = 0; col < array[row].length; col++) {
+                if (array[0][col] == playerSymbol && array[1][col] == playerSymbol
+                        && array[2][col] == playerSymbol) {
+                    return true;
+                }
+            }
+            if (array[0][0] == playerSymbol && array[1][1] == playerSymbol && array[2][2] == playerSymbol) {
+                return true;
+            } else if (array[0][2] == playerSymbol && array[1][1] == playerSymbol
+                    && array[2][0] == playerSymbol) {
+                return true;
+            }
+        }
+        return false;
     }
 }
