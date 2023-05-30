@@ -6,19 +6,12 @@ public class TicTacToe {
         int[][] mineMap = new int[3][3];
         int playerSymbol = 0;
         int computerSymbol = 0;
-        boolean playerWin;
-        boolean twoPlayerWin;
+        boolean playerWin = false;
+        boolean twoPlayerWin = false;
         boolean computerWin;
-        boolean full = false;
         boolean gameOver = false;
-        for (int row = 0; row < mineMap.length; row++) {
-            for (int col = 0; col < mineMap[row].length; col++) {
-                mineMap[row][col] = 0;
-                System.out.print(mineMap[row][col] + "  ");
-            }
-            System.out.println("");
-            System.out.println("");
-        }
+        boolean isFull = false;
+
         // Welcome to Tic-Tac-Toe + choosing your symbol
         System.out.println("Welcome to Tic-Tac-Toe!");
         System.out.println("Would you like to be Os (1) or Xs (2)?");
@@ -37,7 +30,7 @@ public class TicTacToe {
                 System.out.println("Please pick Os (1) or Xs (2) to proceed!");
             }
         }
-        while (!gameOver && !full) {
+        while (!gameOver) {
             // Printing map
             for (int row = 0; row < mineMap.length; row++) {
                 System.out.print("|");
@@ -54,8 +47,10 @@ public class TicTacToe {
             }
             // First player Choosing next move.
             if (playerSymbol == 1) {
+                System.out.println("Player 2 will be X.");
                 System.out.println("Where would you like to place your O?");
             } else {
+                System.out.println("Player 2 will be O.");
                 System.out.println("Where would you like to place your X?");
             }
             System.out.print("Enter your preferred row: ");
@@ -76,6 +71,13 @@ public class TicTacToe {
             } else {
                 playerWin = false;
             }
+            // Checking if board is full
+            if (isFull(mineMap) == true) {
+                gameOver = true;
+                isFull = true;
+            } else {
+                gameOver = false;
+            }
 
             // Second player turn.
             if (computerSymbol == 1) {
@@ -83,6 +85,8 @@ public class TicTacToe {
                 System.out.println("Second player turn.");
                 System.out.println("Where would you like to place your O?");
             } else {
+                System.out.println("");
+                System.out.println("Second player turn.");
                 System.out.println("Where would you like to place your X?");
             }
             System.out.print("Enter your preferred row: ");
@@ -105,14 +109,25 @@ public class TicTacToe {
             }
             // Checking if board is full
             if (isFull(mineMap) == true) {
-                full = true;
                 gameOver = true;
+                isFull = true;
             } else {
-                full = false;
                 gameOver = false;
             }
 
         }
+
+        if (gameOver && playerWin && !twoPlayerWin) {
+            System.out.println("Congrats, you have beaten a friend (or yourself) +1 point");
+            endGame();
+        } else if (gameOver && !playerWin && twoPlayerWin) {
+            System.out.println("Congrats, player 2 has won (Or you beat yourself)");
+            endGame();
+        } else if (gameOver && !playerWin && !twoPlayerWin && isFull) {
+            System.out.println("Congrats, the game is a draw (board is full)");
+            endGame();
+        }
+
     }
 
     public static void printArray(int[] array) {
@@ -133,26 +148,40 @@ public class TicTacToe {
         return true;
     }
 
-    // Checks for winning condition for first player
+    // Checks for winning condition
     public static boolean isPlayerWin(int[][] array, int playerSymbol) {
-        for (int row = 0; row < array.length; row++) {
-            if (array[row][0] == playerSymbol && array[row][1] == playerSymbol
-                    && array[row][2] == playerSymbol) {
-                return true;
-            }
-            for (int col = 0; col < array[row].length; col++) {
-                if (array[0][col] == playerSymbol && array[1][col] == playerSymbol
-                        && array[2][col] == playerSymbol) {
-                    return true;
-                }
-            }
-            if (array[0][0] == playerSymbol && array[1][1] == playerSymbol && array[2][2] == playerSymbol) {
-                return true;
-            } else if (array[0][2] == playerSymbol && array[1][1] == playerSymbol
-                    && array[2][0] == playerSymbol) {
-                return true;
-            }
+        // top row
+        if (array[0][0] == playerSymbol && array[0][1] == playerSymbol && array[0][2] == playerSymbol) {
+            return true;
+            // middle row
+        } else if (array[1][0] == playerSymbol && array[1][1] == playerSymbol && array[1][2] == playerSymbol) {
+            return true;
+            // bottom row
+        } else if (array[2][0] == playerSymbol && array[2][1] == playerSymbol && array[2][2] == playerSymbol) {
+            return true;
+            // middle column
+        } else if (array[1][0] == playerSymbol && array[1][1] == playerSymbol && array[1][2] == playerSymbol) {
+            return true;
+            // left column
+        } else if (array[0][0] == playerSymbol && array[0][1] == playerSymbol && array[0][2] == playerSymbol) {
+            return true;
+            // right column
+        } else if (array[2][0] == playerSymbol && array[2][1] == playerSymbol && array[2][2] == playerSymbol) {
+            return true;
+            // diagonal top left to bottom right
+        } else if (array[0][0] == playerSymbol && array[1][1] == playerSymbol && array[2][2] == playerSymbol) {
+            return true;
+            // diagonal bottom left to top right
+        } else if (array[0][2] == playerSymbol && array[1][1] == playerSymbol && array[2][0] == playerSymbol) {
+            return true;
+            // if no one wins
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public static void endGame() {
+        System.out.println("\033[0;31m" + "GAME END" + "\033[0;31m");
+        System.exit(1);
     }
 }
