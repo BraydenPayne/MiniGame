@@ -32,19 +32,8 @@ public class TicTacToe {
         }
         while (!gameOver) {
             // Printing map
-            for (int row = 0; row < mineMap.length; row++) {
-                System.out.print("|");
-                for (int col = 0; col < mineMap[row].length; col++) {
-                    if (mineMap[row][col] == 0) {
-                        System.out.print("   |");
-                    } else if (mineMap[row][col] == 1) {
-                        System.out.print(" O |");
-                    } else if (mineMap[row][col] == 2) {
-                        System.out.print(" X |");
-                    }
-                }
-                System.out.println(" ");
-            }
+            prtMap(mineMap);
+
             // First player Choosing next move.
             if (playerSymbol == 1) {
                 System.out.println("Player 2 will be X.");
@@ -68,6 +57,7 @@ public class TicTacToe {
             if (isPlayerWin(mineMap, playerSymbol) == true) {
                 playerWin = true;
                 gameOver = true;
+                break;
             } else {
                 playerWin = false;
             }
@@ -75,6 +65,7 @@ public class TicTacToe {
             if (isFull(mineMap) == true) {
                 gameOver = true;
                 isFull = true;
+                break;
             } else {
                 gameOver = false;
             }
@@ -104,6 +95,7 @@ public class TicTacToe {
             if (isPlayerWin(mineMap, computerSymbol) == true) {
                 twoPlayerWin = true;
                 gameOver = true;
+                break;
             } else {
                 gameOver = false;
             }
@@ -111,10 +103,10 @@ public class TicTacToe {
             if (isFull(mineMap) == true) {
                 gameOver = true;
                 isFull = true;
+                break;
             } else {
                 gameOver = false;
             }
-
         }
 
         if (gameOver && playerWin && !twoPlayerWin) {
@@ -127,7 +119,6 @@ public class TicTacToe {
             System.out.println("Congrats, the game is a draw (board is full)");
             endGame();
         }
-
     }
 
     public static void printArray(int[] array) {
@@ -159,14 +150,14 @@ public class TicTacToe {
             // bottom row
         } else if (array[2][0] == playerSymbol && array[2][1] == playerSymbol && array[2][2] == playerSymbol) {
             return true;
-            // middle column
-        } else if (array[1][0] == playerSymbol && array[1][1] == playerSymbol && array[1][2] == playerSymbol) {
-            return true;
             // left column
-        } else if (array[0][0] == playerSymbol && array[0][1] == playerSymbol && array[0][2] == playerSymbol) {
+        } else if (array[0][0] == playerSymbol && array[1][0] == playerSymbol && array[2][0] == playerSymbol) {
+            return true;
+            // middle column
+        } else if (array[0][1] == playerSymbol && array[1][1] == playerSymbol && array[2][1] == playerSymbol) {
             return true;
             // right column
-        } else if (array[2][0] == playerSymbol && array[2][1] == playerSymbol && array[2][2] == playerSymbol) {
+        } else if (array[0][2] == playerSymbol && array[1][2] == playerSymbol && array[2][2] == playerSymbol) {
             return true;
             // diagonal top left to bottom right
         } else if (array[0][0] == playerSymbol && array[1][1] == playerSymbol && array[2][2] == playerSymbol) {
@@ -183,5 +174,21 @@ public class TicTacToe {
     public static void endGame() {
         System.out.println("\033[0;31m" + "GAME END" + "\033[0;31m");
         System.exit(1);
+    }
+
+    public static void prtMap(int[][] array) {
+        for (int row = 0; row < array.length; row++) {
+            System.out.print("|");
+            for (int col = 0; col < array[row].length; col++) {
+                if (array[row][col] == 0) {
+                    System.out.print("   |");
+                } else if (array[row][col] == 1) {
+                    System.out.print(" O |");
+                } else if (array[row][col] == 2) {
+                    System.out.print(" X |");
+                }
+            }
+            System.out.println(" ");
+        }
     }
 }
